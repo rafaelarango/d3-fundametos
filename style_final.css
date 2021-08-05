@@ -1,0 +1,16 @@
+svg {
+  border: 1px solid #aaa;
+}
+
+/* estilos propios de svg  fill= llenar */
+/* rect {
+  fill: rgb(57, 21, 187); 
+  opacity: 0.6;
+} */
+
+text {
+  fill: gray;
+  font-size: 10px;
+  font-family: helvetica;
+  text-anchor: middle;
+}

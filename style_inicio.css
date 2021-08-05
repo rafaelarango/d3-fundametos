@@ -1,0 +1,42 @@
+.barras div {
+  font-size: 10px;
+  background-color: rgb(204, 163, 86);
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+.miGrafica_prueba {
+  width: 25px;
+  height: 100px;
+  margin-right: 2px;
+  background: green;
+  display: inline-block;
+}
+
+svg{
+    border: 1px solid #aaa;
+}
+
+rect{  /* estilos propios de svg */
+    fill: blue;  /* fill= llenar */
+    opacity: .6;
+}
+/* 
+line{
+    stroke: indigo;     stroke= carrera
+} */
+
+text{
+    fill: gray;
+    font-size:10px;
+    font-family: helvetica;
+    text-anchor: middle
+}
+
+circle{
+    fill: blue;
+    stroke: orange;
+    stroke-width: 5px;
+} 

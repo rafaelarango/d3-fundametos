@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instalando d3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style_inicio.css" />
+    <script src="app_inicio.js"></script>
+    <script  src = " https://d3js.org/d3.v6.js "></script>
+    <script  src = " https://unpkg.com/d3-simple-slider "></script>
+
+
+  </head>
+  <body onload="graficarSvg()">
+    <!-- onload ejecuta la funcion cada vez que cargue la pagina -->
+
+    <!-- Con npm -->
+    <p id="value"></p>
+    <div id="slider"></div>
+
+    <div class="barras"></div>
+
+    <hr />
+
+    <div class="container">
+      <div>primero</div>
+      <div>segundo</div>
+      <div>tercero</div>
+    </div>
+    <hr />
+
+    <button onclick="seleccionarBloque()">Seleccionar bloque</button>
+    <div class="container__two container">
+      <div>primero</div>
+      <div>primero</div>
+      <div>primero</div>
+    </div>
+
+    <hr />
+    <button onclick="crearGraficar()">Generar Grafica</button>
+    <div class="grafica"></div>
+
+    <hr />
+    <button onclick="graficaPrueba()">Grafica Prueba</button>
+    <div class="miGrafica"></div>
+
+    <hr>
+    <svg width="300" height="300">
+        <rect x="0" y="0" width="50px" height="50"></rect>
+        <circle cx="150" cy="80" r="10"></circle>
+        <line x1='10' y1="150" x2="290" y2="150"></line>
+        <text x='60' y='290'>Vamos aprendiendo D3.js</text>
+    </svg>
+
+    <hr>
+    <h2>Integrando SVG con D3.js</h2>
+
+    <hr>
+<!-- con npm -->
+    <script>
+        var slider = d3
+    .sliderHorizontal()
+    .min(0)
+    .max(8)
+    .step(1)
+    .width(400)
+    .displayValue(false)
+    .on('onchange', (val) => {
+      d3.select('#value').text(val);
+    });
+
+  d3.select('#slider')
+    .append('svg')
+    .attr('width', 550)
+    .attr('height', 100)
+    .append('g')
+    .attr('transform', 'translate(30,30)')
+    .call(slider);
+
+    console.log(slider.step())
+    </script>
+  </body>
+</html>
