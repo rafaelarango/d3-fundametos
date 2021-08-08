@@ -9,33 +9,34 @@
     <script src="https://unpkg.com/d3-simple-slider"></script>
     <link rel="stylesheet" href="style_final.css" />
     <style>
-
-        /* no signar de forma global */
-        path{
-            fill: rgb(77, 196, 21);
-        };
-        
+      /* no signar de forma global */
+      path {
+        fill: rgb(77, 196, 21);
+      }
     </style>
   </head>
   <body onload="graficarSvg()">
-
     <h2>Grafica N. 1</h2>
 
     <div class="row align-items-center">
-
       <div class="col-sm-2">
-        <p id="value-range"></p><!-- valores min y max-->
+        <p id="value-range"></p>
+        <!-- valores min y max-->
       </div>
 
       <div class="col-sm">
-        <div id="slider-range"></div><!-- slider-->
+        <div id="slider-range"></div>
+        <!-- slider-->
       </div>
-
     </div>
 
     <script>
-      var data = [17 , 67 , 90 , 81 , 4 , 22 , 4 , 71 , 16 , 41 , 93 , 72 , 90 , 45 , 34 , 92 , 63 , 36 , 87 , 16 ]; // data
+      var data = [
+        17, 67, 90, 81, 4, 22, 4, 71, 16, 41, 93, 72, 90, 45, 34, 92, 63, 36,
+        87, 16, 2, 2, 2, 3
+      ]; // data
 
+      let dataVal;
       // Range
       var sliderRange = d3
         .sliderBottom() // damos ubicacion el slider y garrapatas parte inferior (ticks)
@@ -48,11 +49,14 @@
         .fill("green") // fill= llenar color de la barra de rango
         .on("onchange", (val) => {
           // ?????? ASIGNAR EL VALOR DEL RANGO A LOS SELECTORES
-          d3.select("p#value-range").text(`Muestra:` +
-            val.map(d3.format("")).join(" - ")  // se ejectuta despues de mover el rango
+          d3.select("p#value-range").text(
+            `Muestra:` + val.map(d3.format("")).join(" - ") // se ejectuta despues de mover el rango
           );
-          console.log(`min: ${val[0] * 10} - max: ${val[1]}`); // val son los valor inicial y final del rango
+          console.log(`min: ${val[0]} - max: ${val[1]}`); // val son los valor inicial y final del rango
+          dataVal = val[0];
         });
+        // captural el valor del rango por fuera
+
 
       var gRange = d3
         .select("div#slider-range") //?? por que seleccionamos asi un div#slider-range
@@ -61,66 +65,88 @@
         .attr("height", 100) //// alto por medio de atributos al svg
         .append("g") // elemento que hereda las caracteristicas a sus hijos
         .attr("transform", "translate(30,30)")
-        .style('fill','blue' ) // stilo a los valores min y max del rango
-        // los atributos para svg son diferentes ejemplo fill es background
+        .style("fill", "blue"); // stilo a los valores min y max del rango
+      // los atributos para svg son diferentes ejemplo fill es background
 
       gRange.call(sliderRange); // ??? Call=llamado un llamado de los rangos al slider
 
-      d3.select("p#value-range")  // ??? Por que se llama asi al selector
-        .text( `Muestra: ` + // imprimimos un texto, en este caso sera el valor los rangos
-            sliderRange.value() // llamar el valor sliderRange
-            .map(d3.format("")) // map ?? // ?? d3.format permite crear un formato para representar los valores  ejm .map(d3.format(".2%"))
-            .join(" - ")); // Espacio entre los dos valores, podemos asignar - / * ""
+      d3.select("p#value-range") // ??? Por que se llama asi al selector
+        .text(
+          `Muestra: ` + // imprimimos un texto, en este caso sera el valor los rangos
+            sliderRange
+              .value() // llamar el valor sliderRange
+              .map(d3.format("")) // map ?? // ?? d3.format permite crear un formato para representar los valores  ejm .map(d3.format(".2%"))
+              .join(" - ")
+        ); // Espacio entre los dos valores, podemos asignar - / * ""
+
+      /////// grafica el rango del slider
+
+console.log()
+
+      var dataFiltrada = [];
+
+      let rangoInicial = 30;
+      let rangoFinal = 60;
+
+      function filtrarData(i, f) {
+        for (d of data) {
+          if (d >= i && d <= f) {
+            //console.log(d); // imprimimos los elementos de array
+            dataFiltrada.push(d);
+          }
+        }
+      }
+
+      filtrarData(rangoInicial, rangoFinal);
 
 
+      function graficarSvg() {
+        let w = 500;
+        let h = 300;
 
+        let svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", w)
+          .attr("height", h);
 
-/////// grafica
+        svg
+          .selectAll("rect")
+          .data(dataFiltrada)
+          .enter()
+          .append("rect")
+          .attr("x", 0)
+          .attr("width", 20)
+          .attr("height", 10)
+          .attr("fill", function (d) {
+            return "rgb(0, 0, " + d * 10 + ")";
+          })
 
-function graficarSvg(){
-    let w = 500;
-    let h = 300;
+          .attr("x", (d, i) => {
+            return i * 21 + 30; // Ancho de las barras de 20 mas 1 espacio
+          })
+          .attr("height", (d) => {
+            return d;
+          })
+          .attr("y", (d) => {
+            return h - d; // Altura menos el alto
+          });
 
-    let svg = d3.select('body')
-        .append('svg')
-        .attr('width', w)
-        .attr('height', h);
-
-    svg.selectAll('rect')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('x', 0)
-        .attr('width', 20)
-        .attr('height', 10)
-        .attr("fill", function(d) {
-    return "rgb(0, 0, " + (d * 10) + ")";
-})
-
-    .attr('x', (d, i)=>{
-        return i * 21 + 30 // Ancho de las barras de 20 mas 1 espacio
-    })
-    .attr('height', (d)=>{
-        return d 
-    })
-    .attr('y', (d)=>{
-        return h - d; // Altura menos el alto
-    })
-
-    svg.selectAll('text')
-        .data(data)
-        .enter()
-        .append('text')
-        .text((d)=>{
-            return d
-        })
-    .attr('x', (d, i)=>{
-        return i * 21 + 40
-    })
-    .attr('y', (d)=>{
-        return h-d -3
-    })
-}
+        svg
+          .selectAll("text")
+          .data(dataFiltrada)
+          .enter()
+          .append("text")
+          .text((d) => {
+            return d;
+          })
+          .attr("x", (d, i) => {
+            return i * 21 + 40;
+          })
+          .attr("y", (d) => {
+            return h - d - 3;
+          });
+      }
     </script>
   </body>
 </html>
