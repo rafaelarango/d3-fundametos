@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grafica svg</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src=" https://unpkg.com/d3-simple-slider "></script>
+    <link rel="stylesheet" href="xyz.css" />
+    <style>
+      .graficas {
+        display: flex;
+      };
+      
+    </style>
+
+  </head>
+  <body>
+    <!-- barra de navegacion -->
+    <div class="topnav">
+      <a class="active" href="#data">Data</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a>
+    </div>
+     
+    <h1 class="groupSetting__title">Group Settings</h1>
+      <!-- Contenedor con graficas y configuraciones(slider) -->
+      <div class="graficaSlider">
+        <!-- Grafica svg -->
+        <div class="graficas">
+          <svg class="graficaSvg" width="400" height="350"></svg>
+          <svg class="graficaSvgDos" width="400" height="300"></svg>
+          <svg class="graficaSvgTres" width="400" height="300"></svg>
+        </div>
+
+        
+        <div class="slider row align-items-center">
+          
+          <div class="preterm">
+            <h2 class="preterm__title">Pretem Group</h2>
+            <!-- slider-->
+            <div class="col-sm">
+              <h6 class="preterm__subtitle">Gestational Ege - Preterm Group</h6>
+              <div id="slider-range"></div>
+            </div>
+    
+            <!-- Slider N. 2 -->
+            <div class="col-sm">
+              <h6 class="preterm__subtitle">Birth Weight - Preterm Group</h6>
+              <div id="slider-rangeDos"></div>
+            </div>
+          </div>
+  
+          <div class="term">
+            <h2 class="term__title">Term Group</h2>
+            <!-- Slider N. 3 -->
+            <div class="col-sm">
+              <h6 class="term__subtitle">Gestational Ege - Term Group</h6>
+              <div id="slider-rangeTres"></div>
+            </div>
+    
+            <!-- Slider N.4 -->
+            <div class="col-sm">
+              <h6 class="term__subtitle">Birth Weight - Term Group</h6>
+              <div id="slider-rangeCuatro"></div>
+            </div>
+          </div>
+  
+          <!-- seleccionar Genero -->
+          <hr/>
+          <div class="selectGender">
+            <h3>Select Gender</h3>
+            <label class="container"
+              >Woman
+              <input type="checkbox" checked="checked" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container"
+              >Men
+              <input type="checkbox" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+  
+          <!-- Numero de sugetos del grupo -->
+          <div class="subjectsGroup">
+            <h4 class="subjectsGroup__title">Number of subjects per group</h4>
+            <div class="numberSubjects">
+              <p id="value-range"></p>
+              <!-- valores min y max-->
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+
+    <script>
+      //lider
+
+      d3.csv("XYZ.csv").then(function (data) {
+        data.map(function (d) {
+          dataSlider.push(Number(d.value));
+        });
+      });
+
+      let dataSlider = [];
+      console.log(dataSlider);
+
+      let data = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
+
+      // let iterable = [10, 20, 30];
+
+      // for (let value of iterable) {
+
+      //   data.push(value)
+      // }
+      // console.log(data)
+
+      let dataVal;
+      // Range
+      var sliderRange = d3
+        .sliderBottom() // damos ubicacion el slider y garrapatas parte inferior (ticks)
+        .min(d3.min(data)) // .min para valor min de slider y d3.min(data) el valor min de la data
+        .max(d3.max(data)) // igual al min
+        .width(250) // ancho slider
+        .tickFormat(d3.format("")) // d3.format("") determina formato de los numero ejm "%"
+        .ticks(5) // garrapatas
+        .default([2012, 2015]) // asignar valores por defecto al slider
+        .fill("steelblue") // fill= llenar color de la barra de rango
+        .on("onchange", (val) => {
+          // ?????? ASIGNAR EL VALOR DEL RANGO A LOS SELECTORES
+          d3.select("p#value-range").text(
+            `Muestra:` + val.map(d3.format("")).join(" - ") // se ejectuta despues de mover el rango
+          );
+          console.log(`min: ${val[0]} - max: ${val[1]}`); // val son los valor inicial y final del rango
+          rangoSlider.push(2);
+          dataVal = val[0];
+        });
+      // captural el valor del rango por fuera
+
+      //almacenar los rango de la barra
+      let rangoSlider = [];
+      console.log(rangoSlider);
+
+      var gRange = d3
+        .select("div#slider-range") //?? por que seleccionamos asi un div#slider-range
+        .append("svg") // creamos espacio svg
+        .attr("width", 500) // ancho por medio de atributos al svg
+        .attr("height", 70) //// alto por medio de atributos al svg
+        .append("g") // elemento que hereda las caracteristicas a sus hijos
+        .attr("transform", "translate(30,30)")
+        .style("fill", "black"); // stilo a los valores min y max del rango
+      // los atributos para svg son diferentes ejemplo fill es background
+
+      gRange.call(sliderRange); // ??? Call=llamado un llamado de los rangos al slider
+
+      d3.select("p#value-range") // ??? Por que se llama asi al selector
+        .text(
+          `Muestra: ` + // imprimimos un texto, en este caso sera el valor los rangos
+            sliderRange
+              .value() // llamar el valor sliderRange
+              .map(d3.format("")) // map ?? // ?? d3.format permite crear un formato para representar los valores  ejm .map(d3.format(".2%"))
+              .join(" - ")
+        ); // Espacio entre los dos valores, podemos asignar - / * ""
+
+      // slider N.2
+
+      let dataDos = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
+
+      var sliderRangeDos = d3
+        .sliderBottom()
+        .min(d3.min(dataDos))
+        .max(d3.max(dataDos))
+        .width(250)
+        .tickFormat(d3.format(""))
+        .ticks(5)
+        .default([2012, 2014])
+        .fill("steelblue")
+        .on("onchange", (val) => {
+          d3.select("p#value-range").text(
+            `Muestra:` + val.map(d3.format("")).join(" - ")
+          );
+          console.log(`min: ${val[0]} - max: ${val[1]}`);
+          // rangoSlider.push(2);
+          dataVal = val[0];
+        });
+
+      var gRangeDos = d3
+        .select("div#slider-rangeDos")
+        .append("svg")
+        .attr("width", 500)
+        .attr("height", 70)
+        .append("g")
+        .attr("transform", "translate(30,30)")
+        .style("fill", "black");
+
+      gRangeDos.call(sliderRangeDos);
+
+      d3.select("p#value-range").text(
+        `Muestra: ` + sliderRangeDos.value().map(d3.format("")).join(" - ")
+      );
+
+      // Slider N. 3
+
+      let dataTres = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
+
+      let sliderRangeTres = d3
+        .sliderBottom()
+        .min(d3.min(dataTres))
+        .max(d3.max(dataTres))
+        .width(250)
+        .tickFormat(d3.format(""))
+        .ticks(5)
+        .default([2015, 2018])
+        .fill("steelblue")
+        .on("onchange", (val) => {
+          d3.select("p#value-rangeTres").text(
+            `Muestra slider:` + val.map(d3.format("")).join(" - ")
+          );
+        });
+
+      let gRangeTres = d3
+        .select("div#slider-rangeTres")
+        .append("svg")
+        .attr("width", 500)
+        .attr("height", 70)
+        .append("g")
+        .attr("transform", "translate(30,30)")
+        .style("fill", "blanck");
+
+      gRangeTres.call(sliderRangeTres);
+
+      d3.select("p#value-range").text(
+        "Muestra:" + sliderRangeTres.value().map(d3.format("")).join(" - ")
+      );
+
+      // Slider N. 4
+
+      let dataCuatro = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
+
+      let sliderRangeCuatro = d3
+          .sliderBottom()
+          .min(d3.min(dataCuatro))
+          .max(d3.max(dataCuatro))
+          .width(250)
+          .tickFormat(d3.format(''))
+          .ticks(5)
+          .default([2011, 2017])
+          .fill('steelblue')
+          .on('onchange', (val)=>{
+            d3.select('p#value-rangeCuatro').text(
+              'Muestra slider:' + val.map(d3.format('')).join(' - ')
+            );
+          });
+
+      let gRangeCuatro = d3
+          .select('div#slider-rangeCuatro')
+          .append('svg')
+          .attr('width', 500)
+          .attr('height', 70)
+          .append('g')
+          .attr('transform', 'translate(30,30)')
+          .style('fill', 'blanck');
+
+        gRangeCuatro.call(sliderRangeCuatro);
+        
+      d3.select('p#value-range').text(
+        'Muestra:' + sliderRangeCuatro.value().map(d3.format('')).join(' - ')
+      );
+
+
+      /// grafica N. 1
+
+      var svg = d3.select("svg"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin;
+
+      svg
+        .append("text")
+        .attr("transform", "translate(100,0)")
+        .attr("x", 50)
+        .attr("y", 50)
+        .attr("font-size", "24px")
+        .text("Grafica N. 1");
+
+      var xScale = d3.scaleBand().range([0, width]).padding(0.1),
+        yScale = d3.scaleLinear().range([height, 0]);
+
+      var g = svg
+        .append("g")
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+      d3.csv("XYZ.csv").then(function (data) {
+        xScale.domain(
+          data.map(function (d) {
+            return d.year;
+          })
+        );
+        yScale.domain([
+          0,
+          d3.max(data, function (d) {
+            return d.value;
+          }),
+        ]);
+
+        g.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(xScale))
+          .append("text")
+          .attr("y", height - 120)
+          .attr("x", width - 0)
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Year");
+
+        g.append("g")
+          .call(
+            d3
+              .axisLeft(yScale)
+              .tickFormat(function (d) {
+                return "$" + d;
+              })
+              .ticks(10)
+          )
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "-5.1em")
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Stock Price");
+
+        g.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", function (d) {
+            if (d.year >= 2015 && d.year <= 2018) {
+              return xScale(d.year);
+            }
+          })
+          .attr("y", function (d) {
+            return yScale(d.value);
+          })
+          .attr("width", xScale.bandwidth())
+          .attr("height", function (d) {
+            return height - yScale(d.value);
+          });
+      });
+
+
+      // Grafica N. 2
+
+      var svgDos = d3.select(".graficaSvgDos"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin;
+
+
+        
+      svgDos
+        .append("text")
+        .attr("transform", "translate(100,0)")
+        .attr("x", 50)
+        .attr("y", 50)
+        .attr("font-size", "24px")
+        .text("grafica N. 2");
+
+      var xScaleDos = d3.scaleBand().range([0, width]).padding(0.1),
+          yScaleDos = d3.scaleLinear().range([height, 0]);
+
+      var gDos = svgDos
+        .append("g")
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+        d3.csv("XYZ.csv").then(function (data) {
+        xScaleDos.domain(
+          data.map(function (d) {
+            return d.year;
+          })
+        );
+        yScaleDos.domain([
+          0,
+          d3.max(data, function (d) {
+            return d.value;
+          }),
+        ]);
+
+        gDos.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(xScaleDos))
+          .append("text")
+          .attr("y", height - 120)
+          .attr("x", width - 0)
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Year");
+
+        gDos.append("g")
+          .call(
+            d3
+              .axisLeft(yScaleDos)
+              .tickFormat(function (d) {
+                return "$" + d;
+              })
+              .ticks(10)
+          )
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "-5.1em")
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Stock Price");
+
+        gDos.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", function (d) {
+            if (d.year >= 2011 && d.year <= 2018) {
+              return xScaleDos(d.year);
+            }
+          })
+          .attr("y", function (d) {
+            return yScaleDos(d.value);
+          })
+          .attr("width", xScaleDos.bandwidth())
+          .attr("height", function (d) {
+            return height - yScaleDos(d.value);
+          });
+      });
+
+      // Grafica N. 3
+
+      var svgTres = d3.select(".graficaSvgTres"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin;
+
+        svgTres
+        .append("text")
+        .attr("transform", "translate(100,0)")
+        .attr("x", 50)
+        .attr("y", 50)
+        .attr("font-size", "24px")
+        .text("grafica N. 3");
+
+      var xScaleTres = d3.scaleBand().range([0, width]).padding(0.1),
+          yScaleTres = d3.scaleLinear().range([height, 0]);
+
+      var gTres = svgTres
+        .append("g")
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+        d3.csv("XYZ.csv").then(function (data) {
+        xScaleTres.domain(
+          data.map(function (d) {
+            return d.year;
+          })
+        );
+        yScaleTres.domain([
+          0,
+          d3.max(data, function (d) {
+            return d.value;
+          }),
+        ]);
+
+        gTres.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(xScaleTres))
+          .append("text")
+          .attr("y", height - 120)
+          .attr("x", width - 0)
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Year");
+
+          gTres.append("g")
+          .call(
+            d3
+              .axisLeft(yScaleTres)
+              .tickFormat(function (d) {
+                return "$" + d;
+              })
+              .ticks(10)
+          )
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "-5.1em")
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Stock Price");
+
+        gTres.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", function (d) {
+            if (d.year >= 2011 && d.year <= 2018) {
+              return xScaleTres(d.year);
+            }
+          })
+          .attr("y", function (d) {
+            return yScaleTres(d.value);
+          })
+          .attr("width", xScaleDos.bandwidth())
+          .attr("height", function (d) {
+            return height - yScaleTres(d.value);
+          });
+      });
+
+
+
+
+    </script>
+  </body>
+</html>
+
+<!-- 
+
+    <script>
+        
+        // Paso 1 creamos SVG y definimos las escalas
+        // creamos SVG
+        let margin = 200;
+        let svg = d3.select('svg');
+        let width = svg.attr('width') - margin;
+        let height = svg.attr('height') - margin;
+
+
+        //Definir las escalas para nuestro grafico
+        let xScale = d3.scaleBand().range([0, width]).padding(0.4);
+        let yScale = d3.scaleLinear().range([height, 0]);
+
+        let g = svg.append('g')
+                    .attr('transform', 'translate(' + 100 + ',' + 100 + ')');
+
+
+        // Paso 2. Cargamos nuestros datos y agregamos ejes al SVG
+
+        d3.csv('XYZ.csv').then(function (data) {
+
+            xScale.domain(data.map(function (d) { return d.year; }));
+            yScale.domain(0, d3.max(data, function (d) { return d.value;}))
+
+            g.append('g')
+            .attr('transform', 'translate(0,' +  height + ')')
+            .call(d3.axisBottom(xScale));
+
+            g.append("g")
+                .call(d3.axisLeft(yScale).tickFormat(function(d){
+                    return "$" + d;
+                }).ticks(10))
+                .append("text")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("value");
+
+                
+        })
+
+        
+
+        
+
+    </script>
+ -->
