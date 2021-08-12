@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histograma D3</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body{
+            padding:0;
+            margin: 50px;
+        };
+        #misvg{
+            border:solid 1px red;
+            display:block;
+        };
+    </style>
+</head>
+<body>
+    
+<svg id="misvg"></svg>
+
+<script>
+    
+
+    let svgw = 400;
+    let svgh = 300;
+    let margen = {izq:40, der:20, sup:40, inf:40}
+    let grafw = svgw-margen.izq-margen.der;
+    let grafh = svgh-margen.sup-margen.inf;
+
+    d3.csv("AfricanNamesDatabase.csv", d=>{
+        d.age = Number(d.age)
+        return d
+    }).then(hacerHistograma)
+
+    function hacerHistograma(data) {
+        console.log(data[0])
+
+        let svg = d3.select("#misvg")
+                .attr('width', svgw)
+                .attr('height', svgh)
+
+        let dominioX = [0, 30]
+        let escalaX = d3.scaleLinear()
+                            .domain(dominioX)
+                            .range([0, grafw])
+
+
+        svg.append('g')
+            .attr('transform', `translate(${margen.izq},${grafh+margen.sup})`)
+            .call(d3.axisBottom(escalaX))
+
+        let contadorFreq = d3.histogram()
+            .value(d=>d.age)
+            .domain(dominioX)
+            .thresholds(30)
+
+        let bins = contadorFreq(data);
+        console.log(bins)
+
+        let escalaY = d3.scaleLinear()
+                        .domain([0, d3.max(bins, d=>d.length)])
+                        .range([grafh, 0])
+
+        svg.append('g')
+            .attr('transform', `translate(${margen.izq},${margen.sup})`)
+            .call(d3.axisLeft(escalaY))
+            .selectAll('rect')
+            .data(bins)
+            .enter().append('rect')
+            .attr('x', d=>escalaX(d.x1))
+            .attr('y', d=>escalaY(d.length))
+            .attr('width', 30)
+            .attr('height',d=>grafh-escalaY(d.length))
+            .attr('fill', 'blue')
+
+            }
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

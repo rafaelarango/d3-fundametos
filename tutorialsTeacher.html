@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tutorialsTeacher d3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+
+    .bar {
+            fill: steelblue;
+        }
+    </style>
+
+  </head>
+  <body>
+
+    <svg width="600" height="500"></svg>
+
+<script>
+
+var svg = d3.select("svg"),
+    margin = 200,
+    width = svg.attr("width") - margin,
+    height = svg.attr("height") - margin
+
+svg.append("text")
+   .attr("transform", "translate(100,0)")
+   .attr("x", 50)
+   .attr("y", 50)
+   .attr("font-size", "24px")
+   .text("XYZ Foods Stock Price")
+
+var xScale = d3.scaleBand().range([0, width]).padding(0.4),
+    yScale = d3.scaleLinear().range([height, 0]);
+
+var g = svg.append("g")
+           .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+d3.csv('XYZ.csv').then(function (data) {
+  
+    xScale.domain(data.map(function(d) { return d.year; }));
+    yScale.domain([0, d3.max(data, function(d) { return d.value; })]);
+
+    g.selectAll(".bar")
+     .data(data)
+     .enter().append("rect")
+     .attr("class", "bar")
+     .attr("x", function(d) { return xScale(d.year); })
+     .attr("y", function(d) { return yScale(d.value); })
+     .attr("width", xScale.bandwidth())
+     .attr("height", function(d) { return height - yScale(d.value); });
+
+
+     
+})
+
+   
+
+    g.append("g")
+     .attr("transform", "translate(0," + height + ")")
+     .call(d3.axisBottom(xScale))
+     .append("text")
+     .attr("y", height - 250)
+     .attr("x", width - 100)
+     .attr("text-anchor", "end")
+     .attr("stroke", "black")
+     .text("Year");
+
+    g.append("g")
+     .call(d3.axisLeft(yScale).tickFormat(function(d){
+         return "$" + d;
+     })
+     .ticks(10))
+     .append("text")
+     .attr("transform", "rotate(-90)")
+     .attr("y", 6)
+     .attr("dy", "-5.1em")
+     .attr("text-anchor", "end")
+     .attr("stroke", "black")
+     .text("Stock Price");
+
+    
+
+</script>
+
+
+
+</script>
+
+    
+
+
+
+
+  </body>
+</html>
+
+<!--
+    ***************  Ejemplo 1
+
+    <style>
+        .error{
+            background: blue;
+        }
+    </style>
+
+    <div>
+        <p class="text">hola</p>
+        <p class="textDos">hola 2</p>
+        <p class="textTres">hola 3</p>
+        <p>D3 <label><input type="checkbox"></label></p>
+    </div>
+
+
+    <script>
+
+       // d3.selectAll('p').style('color', 'red').text('cambiamos el text')
+
+        d3.select('div').append('p').text('append')
+        d3.select('div').insert('p').text('insert')
+
+        d3.select('p').remove()
+
+        d3.select('.textDos').html('<h1>titulo</h1>').attr('class', 'error')
+        d3.select('input').property('checked', true)
+
+    </script>
+ -->
+
+<!--
+
+    /// ejemplo 2  funcion de datos y manejo de evento mouseovert mouseout
+
+    <style>
+            div{
+                height: 100px;
+                width: 100px;
+                background: red;
+                margin: 5px;
+            }
+    </style>
+
+
+    <p>Warning:This is warning.</p>
+    <p> Error</p>
+
+    <div></div>
+
+
+    <script>
+
+        d3.selectAll("p").style("color", function(d, i) {
+            var text = this.innerText;
+
+            if (text.indexOf("Error") >= 0) {
+                return "red";
+            } else if (text.indexOf("Warning") >= 0) {
+                return "yellow";
+            }
+    });
+
+      d3.selectAll('div')
+            .on("mouseover", function(){
+                d3.select(this)
+                    .style('background-color', 'blue')
+
+                    console.log(event) // evento
+                    console.log(d3.pointer(event))  // punto x y
+            })
+            .on("mouseout", function(){
+                d3.select(this)
+                    .style('background', 'yellow')
+            })
+    </script>
+
+
+  -->
+
+
+
+<!-- Ejercicion 3  animaciones usando transiciones
+
+
+ <style>
+        #container{
+            background: blue;
+            width: 100px;
+            height: 100px;
+            margin:5px
+        }
+    </style>
+
+<div id="container"></div>
+
+
+
+    <script>
+      //  animacion
+        d3.select('#container')
+            .transition() // iniciamos la ransicion
+            .duration(1000) // duracion en milisegundos
+            .style('background-color', 'red');
+
+        //animacion usando
+
+
+        let svg = d3.select('body')
+                        .append('svg')
+                        .attr('width', 500)
+                        .attr('height', 500)
+
+        let barraUno = svg.append("rect")
+                                .attr("fill", "red")
+                                .attr('x', 100)
+                                .attr('y', 20)
+                                .attr('width', 20)
+                                .attr('height', 10)
+
+        let barraDos = svg.append('rect')
+                                .attr("fill", "blue")
+                                .attr('x', 121)
+                                .attr('y', 20)
+                                .attr('width', 20)
+                                .attr('height', 10)
+
+        updata();
+
+        function updata() {
+            barraUno.transition()
+            .ease(d3.easeElastic) // determinar el control de movimiento de la transicion ejm easeElastic para rebote
+            .duration(2000)
+            .delay(2000) // retardo para iniciar la transicion
+            .attr("height", 100);
+
+            barraDos.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .attr('height', 100)
+
+        }
+    </script>
+
+
+-->
+
+
+<!--
+// ejercicio 4  ingresar datos con estilo dinamico para numero pares o impares
+
+    <script>
+
+            let data =[1, 2, 3, 4, 5, 6];
+
+            d3.select('body')
+                    .selectAll('p')
+                    .data(data)
+                    .enter()
+                    .append('p')
+                    .style('color', (d)=>{
+                        if (d % 2 === 0){
+                            return 'red'
+                        }else {
+                            return 'blue'
+                        }
+
+                    })
+                    .text((d)=>{
+                        return d
+                    })
+
+
+
+        </script>
+ -->
+
+ <!-- 
+// ejercicio 5 ejes X,Y escalables
+    <script>
+
+var width = 400, height = 400;
+	var data = [10, 15, 20, 25, 30];
+	
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	var xscale = d3.scaleLinear()
+		.domain([0, d3.max(data)])
+		.range([0, width - 100]);
+
+	var yscale = d3.scaleLinear()
+			.domain([0, d3.max(data)])
+			.range([height/2, 0]);
+
+	var x_axis = d3.axisBottom()
+			.scale(xscale);
+
+	var y_axis = d3.axisLeft()
+			.scale(yscale);
+
+		svg.append("g")
+		   .attr("transform", "translate(50, 10)")
+		   .call(y_axis);
+
+	var xAxisTranslate = height/2 + 10;
+
+		svg.append("g")
+				.attr("transform", "translate(50, " + xAxisTranslate  +")")
+				.call(x_axis)
+
+
+
+
+
+    </script>
+  -->
