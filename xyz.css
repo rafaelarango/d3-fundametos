@@ -1,109 +1,115 @@
-.bar {
-  fill: steelblue;
-}
+/* Barra de navegacion */
 
-.graficaSvg {
-  margin: 0;
-  /* padding: 0; */
-}
-.slider {
-  margin: 0;
-  padding: 5px;
-  background: rgb(248, 246, 246);
-  width: 30%;
-}
-.graficaSlider {
-  display: flex;
-  flex-direction: row-reverse;
-  margin: 0px;
-  padding-top: 0;
-  width: 100%;
-}
-.numberSubjects {
-  border: rgb(218, 215, 215) solid 1px;
-  margin: 0px, 10px, 0, 10px;
-  padding: 10px;
-  height: 100px;
-}
-.subjectsGroup {
-  margin: 10px 0px;
-}
-.subjectsGroup h4 {
-  margin: 0px 0px 5px 0px;
-}
-
-/* Add a black background color to the top navigation */
-.topnav {
-  background-color: #333;
+/* color de fondo a la barra de navegacion */
+.navbar {
+  background-color: #f2f2f2;
   overflow: hidden;
 }
 
-/* Style the links inside the navigation bar */
-.topnav a {
+/* estilo a los enlaces de la barra de navegacion*/
+.navbar a {
   float: left;
-  color: #f2f2f2;
+  color: #333;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
 }
 
-/* Change the color of links on hover */
-.topnav a:hover {
+/* Estilo al pasar el mause  por los enlaces*/
+.navbar a:hover {
   background-color: #ddd;
   color: black;
 }
 
-
-/* group Setting */
-
-.groupSetting__title{
-     font-size: x-large;
+/* Contenedor Configuraciones y graficas */
+.home {
+  display: flex;
+  flex-direction: row-reverse;
 }
 
-/* Slider */
-
-.preterm{
-    margin-left: 10px;
-
-}
-.preterm__title{
-    margin-bottom: 0px;
-    margin-top: 10px;
-    font-size: x-large;
-}
-.preterm__subtitle{
-    margin:10px 0 0 0 ;
+/* Home Tittle configuraciones de grupo */
+.groupSetting__title {
+  font-size: x-large;
 }
 
-.term{
-    margin-left: 10px;
+/* Configuraciones de grupo */
+.home__configuracion {
+  margin: 0;
+  padding: 5px;
+  background: rgb(248, 246, 246);
+  width: 30%;
 }
-.term__title{
-    margin-bottom: 10px;
-    margin-top: 0px;
-    font-size: x-large;
-}
-.term__subtitle{
-    margin:0 ;
-}
-
-/* select gender */
-.selectGender{
-    margin-left: 10px;
-}
-.subjectsGroup{
-    margin-left: 10px;
-}
-
-
-/* Numero de sugetos del grupo */
-.subjectsGroup__title{
-    margin: 0;
+/* Color de relleno a las barras de las graficas */
+.bar {
+  fill: steelblue;
 }
 
 /* Graficas */
+.graficasBarras__svg {
+  width: 310px;
+}
 
-svg{
-    width: 310px;
+/* Graficas de barra */
+.graficas {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.graficasBarras {
+  display: flex;
+}
+
+/* Grupo pretermino */
+.preterm {
+  margin-left: 10px;
+}
+.preterm__title {
+  margin-bottom: 0px;
+  margin-top: 10px;
+  font-size: x-large;
+}
+.preterm__subtitle {
+  margin: 10px 0 0 0;
+}
+
+/* Grupo termino */
+.term {
+  margin-left: 10px;
+}
+.term__title {
+  margin-bottom: 10px;
+  margin-top: 0px;
+  font-size: x-large;
+}
+.term__subtitle {
+  margin: 0;
+}
+
+/* Checkbox Genero */
+.selectGender {
+  margin-left: 10px;
+}
+.subjectsGroup {
+  margin-left: 10px;
+}
+
+/* Numero de sujetos del grupo */
+.numberSubjects {
+  border: rgb(215, 216, 218) solid 1px;
+  margin: 0px, 10px, 0, 10px;
+  padding: 10px;
+  height: 144px;
+}
+
+.subjectsGroup {
+  margin: 10px 0px;
+}
+
+.subjectsGroup h4 {
+  margin: 0px 0px 5px 0px;
+}
+
+.subjectsGroup__title {
+  margin: 0;
 }

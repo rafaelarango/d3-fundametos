@@ -9,50 +9,75 @@
     <script src=" https://unpkg.com/d3-simple-slider "></script>
     <link rel="stylesheet" href="xyz.css" />
     <style>
-      .graficas {
-        display: flex;
-      };
-      
+          .graficasHistogramas{
+            height: 400px;
+            width: 100%;
+            display: flex;
+          }
+
+          .graficasHistograma__svg{
+            width: 400px;
+            margin-left: 50px;
+          }
+
     </style>
 
   </head>
   <body>
     <!-- barra de navegacion -->
-    <div class="topnav">
+    <div class="navbar">
       <a class="active" href="#data">Data</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About</a>
+      <a href="#">Birth 41 W</a>
+      <a href="#">12 Months</a>
+      <a href="#">20 Year</a>
+      <a href="#">Intra stage analysis</a>
+      <a href="#">Inter stage analysis</a>
+      <a href="#">'Cluster Tracking'</a>
     </div>
-     
+
     <h1 class="groupSetting__title">Group Settings</h1>
+
       <!-- Contenedor con graficas y configuraciones(slider) -->
-      <div class="graficaSlider">
-        <!-- Grafica svg -->
+      <div class="home">
+
+        <!-- graficas: Histogramas y barras -->
         <div class="graficas">
-          <svg class="graficaSvg" width="400" height="350"></svg>
-          <svg class="graficaSvgDos" width="400" height="300"></svg>
-          <svg class="graficaSvgTres" width="400" height="300"></svg>
+
+          <h2>Demographic characterrization</h2>
+          <!-- Graficas barras -->
+          <div class="graficasBarras">
+            <svg class="graficasBarras__svg graficaSvg" width="400" height="350"></svg>
+            <svg class="graficasBarras__svg graficaSvgDos" width="400" height="300"></svg>
+            <svg class="graficasBarras__svg graficaSvgTres" width="400" height="300"></svg>
+          </div>
+          <!-- Histogramas -->
+          <div class="graficasHistogramas">
+            <svg class="graficasHistograma__svg histogramaUno"></svg>
+            <svg class="graficasHistograma__svg histogramaDos"></svg>
+          </div>
+
         </div>
 
-        
-        <div class="slider row align-items-center">
-          
+        <!-- Configuracion de grupo -->
+        <div class="home__configuracion row align-items-center">
+
+          <!-- Grupo Pretermino -->
           <div class="preterm">
             <h2 class="preterm__title">Pretem Group</h2>
-            <!-- slider-->
+            <!-- slider N.1-->
             <div class="col-sm">
               <h6 class="preterm__subtitle">Gestational Ege - Preterm Group</h6>
               <div id="slider-range"></div>
             </div>
-    
+
             <!-- Slider N. 2 -->
             <div class="col-sm">
               <h6 class="preterm__subtitle">Birth Weight - Preterm Group</h6>
               <div id="slider-rangeDos"></div>
             </div>
           </div>
-  
+
+          <!-- Grupo Termino -->
           <div class="term">
             <h2 class="term__title">Term Group</h2>
             <!-- Slider N. 3 -->
@@ -60,15 +85,15 @@
               <h6 class="term__subtitle">Gestational Ege - Term Group</h6>
               <div id="slider-rangeTres"></div>
             </div>
-    
+
             <!-- Slider N.4 -->
             <div class="col-sm">
               <h6 class="term__subtitle">Birth Weight - Term Group</h6>
               <div id="slider-rangeCuatro"></div>
             </div>
           </div>
-  
-          <!-- seleccionar Genero -->
+
+          <!-- Checkbox Genero -->
           <hr/>
           <div class="selectGender">
             <h3>Select Gender</h3>
@@ -83,22 +108,30 @@
               <span class="checkmark"></span>
             </label>
           </div>
-  
-          <!-- Numero de sugetos del grupo -->
+
+          <!-- Numero de sujetos del grupo -->
           <div class="subjectsGroup">
             <h4 class="subjectsGroup__title">Number of subjects per group</h4>
             <div class="numberSubjects">
+              <p>By term:</p>
+                  <span>preterm = </span>
+                  <span>Term =</span>
+                  <p>By term:</p>
+                <p>
+                  <span>preterm = </span>
+                  <span>Term =</span>
+                </p>
+
+              </div>
+              <!-- Rango de valores Slider d3-->
               <p id="value-range"></p>
-              <!-- valores min y max-->
             </div>
           </div>
         </div>
       </div>
-    
-
 
     <script>
-      //lider
+      //Slider
 
       d3.csv("XYZ.csv").then(function (data) {
         data.map(function (d) {
@@ -166,8 +199,9 @@
               .join(" - ")
         ); // Espacio entre los dos valores, podemos asignar - / * ""
 
-      // slider N.2
 
+
+      // slider N.2
       let dataDos = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
 
       var sliderRangeDos = d3
@@ -184,7 +218,6 @@
             `Muestra:` + val.map(d3.format("")).join(" - ")
           );
           console.log(`min: ${val[0]} - max: ${val[1]}`);
-          // rangoSlider.push(2);
           dataVal = val[0];
         });
 
@@ -204,7 +237,6 @@
       );
 
       // Slider N. 3
-
       let dataTres = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
 
       let sliderRangeTres = d3
@@ -238,7 +270,6 @@
       );
 
       // Slider N. 4
-
       let dataCuatro = [2011, 2012, 2013, 2014, 2015, 2016, 2017];
 
       let sliderRangeCuatro = d3
@@ -266,14 +297,13 @@
           .style('fill', 'blanck');
 
         gRangeCuatro.call(sliderRangeCuatro);
-        
+
       d3.select('p#value-range').text(
         'Muestra:' + sliderRangeCuatro.value().map(d3.format('')).join(' - ')
       );
 
 
-      /// grafica N. 1
-
+      /// Grafica N. 1
       var svg = d3.select("svg"),
         margin = 200,
         width = svg.attr("width") - margin,
@@ -287,19 +317,18 @@
         .attr("font-size", "24px")
         .text("Grafica N. 1");
 
-      var xScale = d3.scaleBand().range([0, width]).padding(0.1),
-        yScale = d3.scaleLinear().range([height, 0]);
+      let xScale = d3.scaleBand().range([0, width]).padding(0.1);
+      let yScale = d3.scaleLinear().range([height, 0]);
 
       var g = svg
-        .append("g")
-        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+              .append("g")
+              .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
       d3.csv("XYZ.csv").then(function (data) {
-        xScale.domain(
-          data.map(function (d) {
-            return d.year;
-          })
-        );
+        xScale.domain(data.map(function (d) {
+          return d.year
+        }));
+
         yScale.domain([
           0,
           d3.max(data, function (d) {
@@ -318,14 +347,10 @@
           .text("Year");
 
         g.append("g")
-          .call(
-            d3
-              .axisLeft(yScale)
-              .tickFormat(function (d) {
-                return "$" + d;
-              })
-              .ticks(10)
-          )
+          .call(d3
+            .axisLeft(yScale)
+            .tickFormat(function (d) {return "$" + d;})
+            .ticks(10))
           .append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
@@ -339,30 +364,19 @@
           .enter()
           .append("rect")
           .attr("class", "bar")
-          .attr("x", function (d) {
-            if (d.year >= 2015 && d.year <= 2018) {
-              return xScale(d.year);
-            }
-          })
-          .attr("y", function (d) {
-            return yScale(d.value);
-          })
+          .attr("x", function (d) {if (d.year >= 2015 && d.year <= 2018) {return xScale(d.year)}})
+          .attr("y", function (d) {return yScale(d.value)})
           .attr("width", xScale.bandwidth())
-          .attr("height", function (d) {
-            return height - yScale(d.value);
-          });
+          .attr("height", function (d) {return height - yScale(d.value)});
       });
 
 
       // Grafica N. 2
-
       var svgDos = d3.select(".graficaSvgDos"),
         margin = 200,
         width = svg.attr("width") - margin,
         height = svg.attr("height") - margin;
 
-
-        
       svgDos
         .append("text")
         .attr("transform", "translate(100,0)")
@@ -371,19 +385,18 @@
         .attr("font-size", "24px")
         .text("grafica N. 2");
 
-      var xScaleDos = d3.scaleBand().range([0, width]).padding(0.1),
-          yScaleDos = d3.scaleLinear().range([height, 0]);
+      let xScaleDos = d3.scaleBand().range([0, width]).padding(0.1)
+      let yScaleDos = d3.scaleLinear().range([height, 0]);
 
-      var gDos = svgDos
-        .append("g")
-        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+      let gDos = svgDos
+                  .append("g")
+                  .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-        d3.csv("XYZ.csv").then(function (data) {
-        xScaleDos.domain(
-          data.map(function (d) {
-            return d.year;
-          })
-        );
+      d3.csv("XYZ.csv").then(function (data) {
+        xScaleDos.domain(data.map(function (d) {
+          return d.year;
+        }));
+
         yScaleDos.domain([
           0,
           d3.max(data, function (d) {
@@ -402,14 +415,10 @@
           .text("Year");
 
         gDos.append("g")
-          .call(
-            d3
+          .call(d3
               .axisLeft(yScaleDos)
-              .tickFormat(function (d) {
-                return "$" + d;
-              })
-              .ticks(10)
-          )
+              .tickFormat(function (d) { return "$" + d})
+              .ticks(10))
           .append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
@@ -423,100 +432,184 @@
           .enter()
           .append("rect")
           .attr("class", "bar")
-          .attr("x", function (d) {
-            if (d.year >= 2011 && d.year <= 2018) {
-              return xScaleDos(d.year);
-            }
-          })
-          .attr("y", function (d) {
-            return yScaleDos(d.value);
-          })
+          .attr("x", function (d) {if (d.year >= 2011 && d.year <= 2018) {return xScaleDos(d.year)}})
+          .attr("y", function (d) {return yScaleDos(d.value)})
           .attr("width", xScaleDos.bandwidth())
-          .attr("height", function (d) {
-            return height - yScaleDos(d.value);
-          });
-      });
+          .attr("height", function (d) {return height - yScaleDos(d.value)});
+        });
 
       // Grafica N. 3
-
       var svgTres = d3.select(".graficaSvgTres"),
         margin = 200,
         width = svg.attr("width") - margin,
         height = svg.attr("height") - margin;
 
         svgTres
-        .append("text")
-        .attr("transform", "translate(100,0)")
-        .attr("x", 50)
-        .attr("y", 50)
-        .attr("font-size", "24px")
-        .text("grafica N. 3");
+          .append("text")
+          .attr("transform", "translate(100,0)")
+          .attr("x", 50)
+          .attr("y", 50)
+          .attr("font-size", "24px")
+          .text("grafica N. 3");
 
-      var xScaleTres = d3.scaleBand().range([0, width]).padding(0.1),
-          yScaleTres = d3.scaleLinear().range([height, 0]);
+      let xScaleTres = d3.scaleBand().range([0, width]).padding(0.1)
+      let yScaleTres = d3.scaleLinear().range([height, 0]);
 
       var gTres = svgTres
-        .append("g")
-        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+                    .append("g")
+                    .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
         d3.csv("XYZ.csv").then(function (data) {
-        xScaleTres.domain(
-          data.map(function (d) {
+          xScaleTres.domain(data.map(function (d) {
             return d.year;
-          })
-        );
-        yScaleTres.domain([
-          0,
-          d3.max(data, function (d) {
-            return d.value;
-          }),
-        ]);
+          }));
 
-        gTres.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(xScaleTres))
-          .append("text")
-          .attr("y", height - 120)
-          .attr("x", width - 0)
-          .attr("text-anchor", "end")
-          .attr("stroke", "black")
-          .text("Year");
+          yScaleTres.domain([
+            0,
+            d3.max(data, function (d) {
+              return d.value;
+            }),
+          ]);
 
           gTres.append("g")
-          .call(
-            d3
-              .axisLeft(yScaleTres)
-              .tickFormat(function (d) {
-                return "$" + d;
-              })
-              .ticks(10)
-          )
-          .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", "-5.1em")
-          .attr("text-anchor", "end")
-          .attr("stroke", "black")
-          .text("Stock Price");
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScaleTres))
+            .append("text")
+            .attr("y", height - 120)
+            .attr("x", width - 0)
+            .attr("text-anchor", "end")
+            .attr("stroke", "black")
+            .text("Year");
 
-        gTres.selectAll(".bar")
-          .data(data)
-          .enter()
-          .append("rect")
-          .attr("class", "bar")
-          .attr("x", function (d) {
-            if (d.year >= 2011 && d.year <= 2018) {
-              return xScaleTres(d.year);
+            gTres.append("g")
+            .call(d3
+                .axisLeft(yScaleTres)
+                .tickFormat(function (d) { return "$" + d  })
+                .ticks(10))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "-5.1em")
+            .attr("text-anchor", "end")
+            .attr("stroke", "black")
+            .text("Stock Price");
+
+          gTres.selectAll(".bar")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) {if (d.year >= 2011 && d.year <= 2014) {return xScaleTres(d.year)}})
+            .attr("y", function (d) {return yScaleTres(d.value)})
+            .attr("width", xScaleDos.bandwidth())
+            .attr("height", function (d) {return height - yScaleTres(d.value)});
+
+        });
+
+
+    // Histogramas
+        
+    // Histograma N. 1
+    let svgw = 400;
+    let svgh = 300;
+    let margen = {izq:40, der:20, sup:40, inf:40}
+    let grafw = svgw-margen.izq-margen.der;
+    let grafh = svgh-margen.sup-margen.inf;
+
+    d3.csv("AfricanNamesDatabase.csv", d=>{
+        d.age = Number(d.age)
+        return d
+    }).then(hacerHistograma)
+
+    function hacerHistograma(data) {
+        console.log(data[0])
+
+        let svg = d3.select(".histogramaUno")
+                .attr('width', svgw)
+                .attr('height', svgh)
+
+        let dominioX = [0, 30]
+        let escalaX = d3.scaleLinear()
+                            .domain(dominioX)
+                            .range([0, grafw])
+
+
+        svg.append('g')
+            .attr('transform', `translate(${margen.izq},${grafh+margen.sup})`)
+            .call(d3.axisBottom(escalaX))
+
+        let contadorFreq = d3.histogram()
+            .value(d=>d.age)
+            .domain(dominioX)
+            .thresholds(40)
+
+        let bins = contadorFreq(data);
+        console.log(bins)
+
+        let escalaY = d3.scaleLinear()
+                        .domain([0, d3.max(bins, d=>d.length)])
+                        .range([grafh, 0])
+
+        svg.append('g')
+            .attr('transform', `translate(${margen.izq},${margen.sup})`)
+            .call(d3.axisLeft(escalaY))
+            .selectAll('rect')
+            .data(bins)
+            .enter().append('rect')
+            .attr('x', d=>escalaX(d.x1))
+            .attr('y', d=>escalaY(d.length))
+            .attr('width', 30)
+            .attr('height',d=>grafh-escalaY(d.length))
+            .attr('fill', 'rgb(57, 180, 218)')
             }
-          })
-          .attr("y", function (d) {
-            return yScaleTres(d.value);
-          })
-          .attr("width", xScaleDos.bandwidth())
-          .attr("height", function (d) {
-            return height - yScaleTres(d.value);
-          });
-      });
+
+    //Histograma N. 2
+
+    d3.csv('AfricanNamesDatabase.csv', d=>{
+      d.age = Number(d.age)
+      return d
+    }).then(hacerHistogramaDos)
+
+    function hacerHistogramaDos(data) {
+      console.log(data[0])
+
+      let svgDos = d3.select('.histogramaDos')
+                    .attr('width', svgw)
+                    .attr('height', svgh)
+
+      let dominioXDos = [0, 30]
+      let escalaXDos = d3.scaleLinear()
+                            .domain(dominioXDos)
+                            .range([0, grafw])
+
+      svgDos.append('g')
+      .attr('transform', `translate(${margen.izq},${grafh+margen.sup})`)
+      .call(d3.axisBottom(escalaXDos))
+      
+      let contadorFreqDos = d3.histogram()
+          .value(d=>d.age)
+          .domain(dominioXDos)
+          .thresholds(100)
+
+      let binsDos = contadorFreqDos(data);
+      console.log(binsDos)
+
+      let escalaYDos = d3.scaleLinear()
+                          .domain([0, d3.max(binsDos, d=>d.length)])
+                          .range([grafh, 0])
+
+      svgDos.append('g')
+            .attr('transform', `translate(${margen.izq},${margen.sup})`)
+            .call(d3.axisLeft(escalaYDos))
+            .selectAll('rect')
+            .data(binsDos)
+            .enter().append('rect')
+            .attr('x', d=>escalaXDos(d.x1))
+            .attr('y', d=>escalaYDos(d.length))
+            .attr('width', 30)
+            .attr('height',d=>grafh-escalaYDos(d.length))
+            .attr('fill', 'rgb(93, 233, 93)')
+    }
 
 
 
@@ -525,10 +618,10 @@
   </body>
 </html>
 
-<!-- 
+<!--
 
     <script>
-        
+
         // Paso 1 creamos SVG y definimos las escalas
         // creamos SVG
         let margin = 200;
@@ -566,12 +659,12 @@
                 .attr("text-anchor", "end")
                 .text("value");
 
-                
+
         })
 
-        
 
-        
+
+
 
     </script>
  -->

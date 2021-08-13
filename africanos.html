@@ -55,7 +55,7 @@
         let contadorFreq = d3.histogram()
             .value(d=>d.age)
             .domain(dominioX)
-            .thresholds(30)
+            .thresholds(40)
 
         let bins = contadorFreq(data);
         console.log(bins)
